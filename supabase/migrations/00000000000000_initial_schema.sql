@@ -17,6 +17,7 @@ CREATE TABLE public.profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   email TEXT NOT NULL,
   full_name TEXT,
+  usn TEXT,
   role TEXT NOT NULL DEFAULT 'participant' CHECK (role IN ('admin', 'participant', 'judge')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -27,6 +28,7 @@ CREATE TABLE public.teams (
   name TEXT NOT NULL UNIQUE,
   join_code TEXT NOT NULL UNIQUE,
   leader_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+  roster JSONB NOT NULL DEFAULT '[]'::jsonb,
   is_qualified BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -137,8 +139,14 @@ CREATE POLICY "Problems readable by everyone" ON public.problems FOR SELECT USIN
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, full_name, role)
-  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name', 'participant');
+  INSERT INTO public.profiles (id, email, full_name, usn, role)
+  VALUES (
+    new.id, 
+    new.email, 
+    new.raw_user_meta_data->>'full_name', 
+    new.raw_user_meta_data->>'usn',
+    'participant'
+  );
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

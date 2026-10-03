@@ -57,16 +57,28 @@ export default function LoginPage() {
           <CardContent>
             <form action={handleSubmit} className="space-y-4">
               {!isLogin && (
-                <div className="space-y-2">
-                  <Label htmlFor="full_name" className="text-white/70">Full Name</Label>
-                  <Input 
-                    id="full_name" 
-                    name="full_name" 
-                    placeholder="e.g. Ada Lovelace"
-                    required 
-                    className="bg-white/5 border-white/10 focus-visible:ring-neon-green text-white placeholder:text-gray-600" 
-                  />
-                </div>
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="full_name" className="text-white/70">Full Name</Label>
+                    <Input 
+                      id="full_name" 
+                      name="full_name" 
+                      placeholder="e.g. Ada Lovelace"
+                      required 
+                      className="bg-white/5 border-white/10 focus-visible:ring-neon-green text-white placeholder:text-gray-600" 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="usn" className="text-white/70">USN / Roll Number</Label>
+                    <Input 
+                      id="usn" 
+                      name="usn" 
+                      placeholder="e.g. 1RV21CS001"
+                      required 
+                      className="bg-white/5 border-white/10 focus-visible:ring-neon-green text-white placeholder:text-gray-600 uppercase" 
+                    />
+                  </div>
+                </>
               )}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-white/70">Email Address</Label>
